@@ -2,6 +2,7 @@ var value, data = { "error_message": null, "forecast_params": { "agg_period": "3
 // Save your API response in data.
 
 (function($) {
+
     $("#recommendation").click(function() {
 
         // This the Apply Recommendation button's clickListener
@@ -119,6 +120,7 @@ var value, data = { "error_message": null, "forecast_params": { "agg_period": "3
                 if (target === 'cpu') {
                     cpuData.history = data.metrics_history;
                     cpuData.forecast = data.forecast_result["0"].metrics_forecast;
+                    alert('123');
                 }
 
                 if (target === 'ram') {
@@ -326,5 +328,7 @@ var value, data = { "error_message": null, "forecast_params": { "agg_period": "3
             e.preventDefault();
         }
     });
+
+
     // End of counter code.
 })(jQuery)

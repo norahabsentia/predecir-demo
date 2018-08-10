@@ -9,7 +9,6 @@
 	var interval;
 	var playing = true;
 	moveCharts();
-	
 	$( "#play" ).click(function() {
 	 playing = true;
 	});
@@ -183,6 +182,31 @@
       handleData();
     }, loopDelay);
   }
+
+  var gcpMachines = ['n1-standard-1', 'n1-standard-2', 'n1-standard-4', 'n1-standard-8', 'n1-standard-16', 'n1-standard-32', 'n1-standard-64', 'n1-standard-96'];
+
+  function showRecommendedConfig(type, health){
+    var selectedId = type + '-recommendContainer';
+    console.log(selectedId, type, health);
+    var presentConfig = $('#'+selectedId + ' .presentConfig').text().split(' ').pop();
+    var recommendedConfig = "";
+    switch(health){
+      case 'decrease':
+        recommendedConfig = gcpMachines[gcpMachines.indexOf(presentConfig) - 1] || presentConfig;
+        console.log(recommendedConfig);
+        break;
+      case 'increase':
+        recommendedConfig = gcpMachines[gcpMachines.indexOf(presentConfig) + 1] || presentConfig;
+        var htmlOfNext = $('#' + selectedId).next().html();
+        $('#' + selectedId).next().html(htmlOfNext + '<button type="button" class="btn btn-secondary btn-outline-dark" id="reset">Scale Horizontally</button>');
+        break;
+      default:
+        recommendedConfig = presentConfig;
+        break;
+    }
+    $('#' + selectedId + ' .recommendedConfig').html('Recommended Configuration : <b>'+ recommendedConfig + '</b>');
+  }
+
   function createChart(chartEl, url) {
 
     var chart;
@@ -319,7 +343,6 @@
 
     // generate some random data, quite different range
     function generateChartData(url) {
-
       $.ajax({
         url: url,
         dataType: 'json',
@@ -334,13 +357,15 @@
           var recommended = data.forecast_result["0"].recommendation_forecast;
 
             // console.log('reco',recommended);
+          var selectedHealth = '';
           for (var i = 0; i < 400; i++) {
             // we create date objects here. In your data, you can have date strings
             // and then set format of your dates using chart.dataDateFormat property,
             // however when possible, use date objects, as this will speed up chart rendering.
             var newDate = new Date(firstDate);
             newDate.setDate(newDate.getDate() + i);
-            console.log(recommended[i])
+            //console.log(recommended[i]);
+            selectedHealth = recommended[i].recomendation;
             chartData.push({
               date: new Date(forecast[i].timestamp),
               history: history[i] ? history[i].value : '',
@@ -350,6 +375,8 @@
 
             
           }
+
+
             $('.amcharts-chart-div a').hide();
             $('svg image').hide();
             $('svg image').next('rect').hide();
@@ -357,17 +384,21 @@
             
             chart.dataProvider = chartData;
             
-            console.log('chdata', chartData);
+            //console.log('chdata', chartData);
 	
-		     if (url === './data/CPU_n.json') {
+      if (url === './data/CPU_n.json') {
+        showRecommendedConfig('cpu', selectedHealth);
 			   cpuChart = chart;
+			   //console.log('abc : ', chartData);
 			}
 
 			if (url === './data/RAM_n.json') {
+        showRecommendedConfig('ram', selectedHealth);
 			  ramChart = chart;
 			}
 
 			if (url ===  './data/Network_n.json') {
+        showRecommendedConfig('network', selectedHealth);
 			  networkChart = chart;
 			}
         //   console.log(chartData);

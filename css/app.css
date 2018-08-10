@@ -19,3 +19,10 @@ canvas {
 .amcharts-main-div image+rect{
   display: none !important;
 }
+.font-12{
+  font-size:12px !important;
+  margin-top: 17px;
+}
+#cpu-recommendContainer{
+  margin-top:11px;
+}
