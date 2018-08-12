@@ -193,12 +193,13 @@
     switch(health){
       case 'decrease':
         recommendedConfig = gcpMachines[gcpMachines.indexOf(presentConfig) - 1] || presentConfig;
-        console.log(recommendedConfig);
+        console.log('decrease');
         break;
       case 'increase':
         recommendedConfig = gcpMachines[gcpMachines.indexOf(presentConfig) + 1] || presentConfig;
         var htmlOfNext = $('#' + selectedId).next().html();
         $('#' + selectedId).next().html(htmlOfNext + '<button type="button" class="btn btn-secondary btn-outline-dark" id="reset">Scale Horizontally</button>');
+        console.log('increase');
         break;
       default:
         recommendedConfig = presentConfig;
@@ -364,8 +365,17 @@
             // however when possible, use date objects, as this will speed up chart rendering.
             var newDate = new Date(firstDate);
             newDate.setDate(newDate.getDate() + i);
-            //console.log(recommended[i]);
-            selectedHealth = recommended[i].recomendation;
+            //console.log(history[i]);
+            if(history[i] && history[i].value > 75){
+              selectedHealth = 'increase'
+            }
+            else if (history[i] && history[i].value < 50){
+              selectedHealth = 'decrease'
+            }
+            else{
+              selectedHealth = 'healthy'
+            }
+            //selectedHealth = recommended[i].recomendation;
             chartData.push({
               date: new Date(forecast[i].timestamp),
               history: history[i] ? history[i].value : '',
