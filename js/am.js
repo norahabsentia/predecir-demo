@@ -13,7 +13,7 @@
     var networkloadFactor = 1;
     var networkDataUrl = '';
     moveCharts();
-    var serverLInk = "http://35.200.154.50:8000/";
+    var serverLInk = "http://35.200.154.50:9999/";
     //var serverLInk = "http://localhost:8000/";
 
     //EDIT THIS
