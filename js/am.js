@@ -52,6 +52,7 @@
             success: function(data) {
                 currentMachinesCount = data.length;
                 machineNames = data.map((v) => v.name);
+                responseFromHeroku('cpu');
                 showPresentConfig();
             },
             error: function(err) {
